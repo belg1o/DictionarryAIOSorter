@@ -1,0 +1,41 @@
+name: Update Sorted Quality Profiles
+
+on:
+  schedule:
+    # Every 6 hours
+    - cron: "0 */24 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  sort:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Sort profiles
+        run: python sort_profiles.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add 2160p-quality.expressions.sorted.json
+
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update sorted quality profiles"
+            git push
+          fi
