@@ -1,9 +1,5 @@
 name: Update Sorted Quality Profiles222
 
-on:
-  schedule:
-    # Every 6 hours
-    - cron: "0 */24 * * *"
 
   workflow_dispatch:
 
